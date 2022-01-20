@@ -20,17 +20,11 @@ def init(
     """Initialize the to-do database."""
     app_init_error = config.init_app(db_path)
     if app_init_error:
-        typer.secho(
-            f'Creating config file failed with "{ERRORS[app_init_error]}"',
-            fg=typer.colors.RED,
-        )
+        typer.secho(f'Creating config file failed with "{ERRORS[app_init_error]}"', fg=typer.colors.RED,)
         raise typer.Exit(1)
     db_init_error = database.init_database(Path(db_path))
     if db_init_error:
-        typer.secho(
-            f'Creating database failed with "{ERRORS[db_init_error]}"',
-            fg=typer.colors.RED,
-        )
+        typer.secho(f'Creating database failed with "{ERRORS[db_init_error]}"', fg=typer.colors.RED,)
         raise typer.Exit(1)
     else:
         typer.secho(f"The to-do database is {db_path}", fg=typer.colors.GREEN)
@@ -64,9 +58,7 @@ def add(
     todoer = get_todoer()
     todo, error = todoer.add(description, priority)
     if error:
-        typer.secho(
-            f'Adding to-do failed with "{ERRORS[error]}"', fg=typer.colors.RED
-        )
+        typer.secho(f'Adding to-do failed with "{ERRORS[error]}"', fg=typer.colors.RED)
         raise typer.Exit(1)
     else:
         typer.secho(
@@ -112,10 +104,7 @@ def set_done(todo_id: int = typer.Argument(...)) -> None:
     todoer = get_todoer()
     todo, error = todoer.set_done(todo_id)
     if error:
-        typer.secho(
-            f'Completing to-do # "{todo_id}" failed with "{ERRORS[error]}"',
-            fg=typer.colors.RED,
-        )
+        typer.secho(f'Completing to-do # "{todo_id}" failed with "{ERRORS[error]}"', fg=typer.colors.RED,)
         raise typer.Exit(1)
     else:
         typer.secho(
@@ -154,6 +143,23 @@ def remove(
             _remove()
         else:
             typer.echo("Operation canceled")
+
+
+@app.command(name="clear")
+def remove_all(
+    force: bool = typer.Option(..., prompt="Delete all to-dos?", help="Force deletion without confirmation.",),
+) -> None:
+    """Remove all to-dos."""
+    todoer = get_todoer()
+    if force:
+        error = todoer.remove_all().error
+        if error:
+            typer.secho(f'Removing to-dos failed with "{ERRORS[error]}"', fg=typer.colors.RED,)
+            raise typer.Exit(1)
+        else:
+            typer.secho("All to-dos were removed", fg=typer.colors.GREEN)
+    else:
+        typer.echo("Operation canceled")
 
 
 def _version_callback(value: bool) -> None:
