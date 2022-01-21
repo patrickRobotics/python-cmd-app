@@ -4,7 +4,7 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-from todo import (DB_READ_ERROR, SUCCESS, __app_name__, __version__, cli, rptodo)
+from todo import (DB_READ_ERROR, SUCCESS, __app_name__, __version__, cli, todo)
 
 runner = CliRunner()
 
@@ -60,7 +60,7 @@ test_data2 = {
     ],
 )
 def test_add(mock_json_file, description, priority, expected):
-    todoer = rptodo.Todoer(mock_json_file)
+    todoer = todo.Todoer(mock_json_file)
     assert todoer.add(description, priority) == expected
     read = todoer._db_handler.read_todos()
     assert len(read.todo_list) == 2
