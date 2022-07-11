@@ -31,4 +31,4 @@ workflows:
   sample:
     jobs:
       - create_infrastructure
-      - build-and-test-
+      - build-and-test
