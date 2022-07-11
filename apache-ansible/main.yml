@@ -1,0 +1,7 @@
+---
+-
+  hosts: localhost
+  name: "hello world page!"
+  roles:
+    - prepare
+    - apache
