@@ -6,11 +6,15 @@ orbs:
 jobs:
   configure_infrastructure:
     docker:
-      - image: python:3.10.5-alpine3.16
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: [ "2a:2e:cc:14:0b:d6:f2:bd:33:0c:cf:34:29:7e:09:6e" ]
+      - run:
+          name: Install dependencies (openssh)
+          command: |
+            apk add --update openssh # Install openssh
       - run:
           name: Install Ansible
           command: |
