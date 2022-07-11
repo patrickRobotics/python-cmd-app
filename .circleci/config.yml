@@ -4,7 +4,7 @@ orbs:
   python: circleci/python@1.5.0
 
 jobs:
-  create_infrastructure1:
+  create_infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
