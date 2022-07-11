@@ -4,6 +4,18 @@ orbs:
   python: circleci/python@1.5.0
 
 jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Create Cloudformation Stack
+            command: |
+              aws cloudformation deploy \
+                --template-file template.yml \
+                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+                --region us-east-1
   build-and-test:
     docker:
       - image: cimg/python:3.10.2
@@ -18,4 +30,5 @@ jobs:
 workflows:
   sample:
     jobs:
-      - build-and-test
+      - create_infrastructure
+      - build-and-test-
