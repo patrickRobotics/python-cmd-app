@@ -56,7 +56,7 @@ jobs:
           name: Create Cloudformation Stack
           command: |
             aws cloudformation deploy \
-              --template-file template.yml \
+              --template-file ansible-ec2/template.yml \
               --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
               --region us-east-1
 
@@ -83,6 +83,5 @@ jobs:
 workflows:
   sample:
     jobs:
-      - configure_infrastructure
       - create_infrastructure
       - smoke_test
