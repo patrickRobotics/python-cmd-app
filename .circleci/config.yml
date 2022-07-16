@@ -3,6 +3,16 @@ version: 2.1
 orbs:
   python: circleci/python@1.5.0
 
+commands:
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable
+          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
+
 jobs:
   configure_infrastructure:
     docker:
@@ -35,8 +45,30 @@ jobs:
           name: Run tests
           command: pytest
 
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - checkout
+      - run:
+          name: simulate error
+          command: |
+            return 1
+      - destroy_environment
+        when: on fail
+#            URL="https://blog.udacity.com/"
+#            # Test if website exists
+#            if curl -s --head ${URL}
+#            then
+#              return 0
+#            else
+#              return 1
+#            fi
+
+
 workflows:
   sample:
     jobs:
+      - smoke_test
       - configure_infrastructure
       - build-and-test
