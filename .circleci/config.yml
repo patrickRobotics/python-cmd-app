@@ -69,7 +69,7 @@ jobs:
           command: |
             return 1
       - destroy_environment
-        when: on_fail
+          when: on_fail
 #            URL="https://blog.udacity.com/"
 #            # Test if website exists
 #            if curl -s --head ${URL}
