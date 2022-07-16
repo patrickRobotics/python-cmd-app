@@ -71,4 +71,4 @@ workflows:
     jobs:
       - smoke_test
       - configure_infrastructure
-      - build-and-test
+      - smoke_test
