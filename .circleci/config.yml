@@ -46,6 +46,20 @@ jobs:
           name: Run tests
           command: pytest
 
+  # Exercise - Rollback
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
+              --region us-east-1
+
   smoke_test:
     docker:
       - image: alpine:latest
@@ -69,6 +83,6 @@ jobs:
 workflows:
   sample:
     jobs:
-      - smoke_test
       - configure_infrastructure
+      - create_infrastructure
       - smoke_test
